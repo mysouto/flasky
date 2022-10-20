@@ -9,5 +9,11 @@ def create_app():
     # __name__ stores the name of the module we're in
     app = Flask(__name__)
 
+    # 6. final steps: Make sure Flask knows app functions exits -> go to init file (from bike file)
+    from .routes.bike import bike_bp
+    # 7. register, connect blueprint back to app
+    # "this is the blueprint i wanna connect to my server"
+    app.register_blueprint(bike_bp)
+
     # creates app instance and returns it
     return app
