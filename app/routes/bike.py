@@ -30,10 +30,12 @@ bikes = [
 bike_bp = Blueprint("bike_bp", __name__, url_prefix="/bike")
 
 
+# DEFINING AN ENDPOINT
 # 4. create function to return JSON for client
-# 5. add constructor
+# 5. add decorator with arguments (args define what type of request will be routed to this function)
 # "" that follows /bike, methods=[requests]
 @bike_bp.route("", methods=["GET"])
+# function will execute whenever a request that matches the decorator is received
 def get_all_bikes():
     # convert python objects/class into JSON
     # 1. convert to dictionary (lst of dicts)
@@ -54,6 +56,7 @@ def get_all_bikes():
 
     # RETURN LOGIC
     # logic: jsonify response with status 200
+    # For each endpoint, we must return the HTTP response
     return jsonify(response), 200
 
 # 6. Make sure Flask knows app functions exits -> go to init file
