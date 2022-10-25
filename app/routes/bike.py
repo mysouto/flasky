@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify
+import json
+from flask import abort, Blueprint, jsonify, make_response
 
 
 class Bike:
@@ -74,6 +75,9 @@ def get_one_bike(bike_id):
         response_str = f"Invalid bike_id: {bike_id}. ID must be a integer."
         return jsonify({"message": response_str}), 400
 
+    # validate with helper validation function
+    bike_id = validate_id(bike_id)
+
     # after try-except: bike_id will be a valid int
     # 2. iterate thru data to find item with matching id
     for bike in bikes:
@@ -92,3 +96,16 @@ def get_one_bike(bike_id):
     # 4. after loop: bike with matching id not found -> raise "404 object not found" error
     response_message = f"Could not find bike with ID {bike_id}"
     return jsonify({"message": response_message}), 404
+
+
+# REVIEW SESSION
+# ADD VALIDATION LOGIC to 1 helper function
+def validate_id(id):
+    try:
+        int_id = int(id)
+    except ValueError:
+        # bubble up exception
+        response_str = f"Invalid id: {id}. ID must be an integer."
+        abort(make_response(jsonify({"message": response_str}), 400))
+
+    return int_id
