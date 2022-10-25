@@ -3,6 +3,7 @@ from flask import Flask
 # can refer back from previous projects
 
 
+# APP FUNCTION registers blueprint
 # function needs to be named exactly "create_app"
 # when `run Flask` it will look for create_app function
 def create_app():
@@ -10,7 +11,7 @@ def create_app():
     app = Flask(__name__)
 
     # 6. final steps: Make sure Flask knows app functions exits -> go to init file (from bike file)
-    # -- import bike_bp from bike file
+    # -- import bike blueprint from bike file
     from .routes.bike import bike_bp
 
     # 7. register/connect blueprint back to app
