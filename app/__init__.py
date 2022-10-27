@@ -20,6 +20,7 @@ def create_app():
     # where database is on the internet
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/bikes_development"
 
+    from app.models.bike import Bike
     # CONNECT DATABASE TO APP
     # flask app/server
     db.init_app(app)
