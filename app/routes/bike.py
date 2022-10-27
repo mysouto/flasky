@@ -37,6 +37,7 @@ def get_all_bikes():
     # only thing changed: add .query.all below
     bikes = Bike.query.all()
 
+    # logic to convert python bike object to dict and json
     response = []
     for bike in bikes:
         bike_dict = {
