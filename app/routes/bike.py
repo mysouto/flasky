@@ -16,14 +16,15 @@ def add_bike():
     new_bike = Bike(
         name=request_body["name"],
         price=request_body["price"],
-        type=request_body["type"],
         size=request_body["size"],
+        type=request_body["type"]
     )
 
     # add to dict
     db.session.add(new_bike)
 
     # IMPORTANT - make sure to make a commit
+    # saving new record to table
     db.session.commit()
 
     # id is automatically populated after add and commit steps
@@ -35,6 +36,7 @@ def add_bike():
 @bike_bp.route("", methods=["GET"])
 def get_all_bikes():
     # only thing changed: add .query.all below
+    # queries and gets a list of all instances of bike
     bikes = Bike.query.all()
 
     # logic to convert python bike object to dict and json
@@ -45,8 +47,9 @@ def get_all_bikes():
             "name": bike.name,
             "price": bike.price,
             "size": bike.size,
-            "type": bike.type,
+            "type": bike.type
         }
 
         response.append(bike_dict)
+
     return jsonify(response), 200
