@@ -18,7 +18,7 @@ def create_app():
     # CONFIG FOR DATABASE
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # where database is on the internet
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/bikes_developement"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/bikes_development"
 
     # CONNECT DATABASE TO APP
     # flask app/server
