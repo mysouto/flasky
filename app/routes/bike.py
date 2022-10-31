@@ -126,8 +126,9 @@ def delete_one_bike(bike_id):
     bike = validate_bike(bike_id)
 
     # command to delete object from database
-    db.session.delete()
+    # param: bike
+    db.session.delete(bike)
 
     db.session.commit()
 
-    return jsonify(f"Bike {bike_id} successfully deleted."), 200
+    return jsonify(f"Bike #{bike_id} successfully deleted."), 200
