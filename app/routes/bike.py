@@ -74,7 +74,7 @@ def get_all_bikes():
     return jsonify(response), 200
 
 
-# CREATE GET ROUTE FOR 1 BIKE
+# Create GET route for 1 bike
 @bike_bp.route("/<bike_id>", methods=["GET"])
 def get_one_bike(bike_id):
     chosen_bike = validate_bike(bike_id)
@@ -88,3 +88,46 @@ def get_one_bike(bike_id):
     }
 
     return jsonify(bike_dict), 200
+
+
+# Create PUT route to add a object
+@bike_bp.route("/<bike_id>", methods=["PUT"])
+def update_date_with_new_vals(bike_id):
+    # validate with helper to pass reqs
+    bike = validate_bike(bike_id)
+
+    request_body = request.get_json()
+
+    # all attributes required -> using PUT to replace entire entity
+    # if any attribute missing, return message
+    if "name" not in request_body or \
+        "size" not in request_body or \
+        "price" not in request_body or \
+            "type" not in request_body:
+        return jsonify({"message": "Request must include name, size, price, and type"})
+
+    # specify and set new values
+    bike.name = request_body["name"]
+    bike.size = request_body["size"]
+    bike.price = request_body["price"]
+    bike.type = request_body["type"]
+
+    # commit change
+    db.session.commit()
+
+    # return make_response(f"Bike {bike_id} successfully updated.")
+    return jsonify(f"Bike {bike_id} successfully updated."), 200
+
+
+# Create DELETE route
+# using id
+@bike_bp.route("/<bike_id>", methods=["DELETE"])
+def delete_one_bike(bike_id):
+    bike = validate_bike(bike_id)
+
+    # command to delete object from database
+    db.session.delete()
+
+    db.session.commit()
+
+    return jsonify(f"Bike {bike_id} successfully deleted."), 200
