@@ -1,5 +1,6 @@
 import json
-from flask import abort, Blueprint, jsonify, request
+from attr import validate
+from flask import abort, Blueprint, jsonify, make_response, request
 from app import db
 from app.models.bike import Bike
 
@@ -11,14 +12,14 @@ def validate_bike(bike_id):
         bike_id = int(bike_id)
     except ValueError:
         response_str = f"Invalid bike_id: {bike_id}. ID must be a integer."
-        abort(response_str, 400)
+        abort(make_response({"message": response_str}, 400))
 
     matching_bike = Bike.query.get(bike_id)
 
     # bike with matching id not found -> 404
     if matching_bike is None:
         response_str = f"Could not find bike with ID {bike_id}"
-        abort(response_str, 404)
+        abort(make_response({"message": response_str}, 404))
 
     # if matching bike found, return bike object
     return matching_bike
@@ -71,3 +72,19 @@ def get_all_bikes():
         response.append(bike_dict)
 
     return jsonify(response), 200
+
+
+# CREATE GET ROUTE FOR 1 BIKE
+@bike_bp.route("/<bike_id>", methods=["GET"])
+def get_one_bike(bike_id):
+    chosen_bike = validate_bike(bike_id)
+    # returns jsonified object and response code as tuple
+    bike_dict = {
+        "id": chosen_bike.id,
+        "name": chosen_bike.name,
+        "price": chosen_bike.price,
+        "size": chosen_bike.size,
+        "type": chosen_bike.type
+    }
+
+    return jsonify(bike_dict), 200
