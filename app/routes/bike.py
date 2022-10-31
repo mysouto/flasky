@@ -6,6 +6,24 @@ from app.models.bike import Bike
 bike_bp = Blueprint("bike_bp", __name__, url_prefix="/bike")
 
 
+def validate_bike(bike_id):
+    try:
+        bike_id = int(bike_id)
+    except ValueError:
+        response_str = f"Invalid bike_id: {bike_id}. ID must be a integer."
+        abort(response_str, 400)
+
+    matching_bike = Bike.query.get(bike_id)
+
+    # bike with matching id not found -> 404
+    if matching_bike is None:
+        response_str = f"Could not find bike with ID {bike_id}"
+        abort(response_str, 404)
+
+    # if matching bike found, return bike object
+    return matching_bike
+
+
 # CREATE POST ROUTE
 # decorator
 @bike_bp.route("", methods=["POST"])
