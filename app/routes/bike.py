@@ -54,12 +54,22 @@ def add_bike():
 # to query bikes in database
 @bike_bp.route("", methods=["GET"])
 def get_all_bikes():
-    # only thing changed: add .query.all below
-    # queries and gets a list of all instances of bike
-    bikes = Bike.query.all()
+    # ADDING QUERY PARAMETER -> FUNCTIONALITY
+    # functionality: only get some bikes -> Add Query Parameter
+    name_param = request.args.get("name")  # arg for .get: name of query param
+
+    # add logic to check if param is required? or specified
+    if name_param is None:
+        # queries and gets a list of all instances of bike
+        bikes = Bike.query.all()
+    else:
+        # filder_by filters by a condition specified in arg
+        # need to specify column by using "name="
+        bikes = Bike.query.filter_by(name=name_param)
 
     # logic to convert python bike object to dict and json
     response = []
+    # iterate over bikes object
     for bike in bikes:
         bike_dict = {
             "id": bike.id,
