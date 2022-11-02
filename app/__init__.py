@@ -3,6 +3,7 @@ from flask import Flask
 # can refer back from previous projects
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
 # import for new env
 from dotenv import load_dotenv
 import os

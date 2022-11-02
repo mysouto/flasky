@@ -102,7 +102,7 @@ def get_one_bike(bike_id):
 
 # Create PUT route to add a object
 @bike_bp.route("/<bike_id>", methods=["PUT"])
-def update_date_with_new_vals(bike_id):
+def update_bike_with_new_vals(bike_id):
     # validate with helper to pass reqs
     bike = validate_bike(bike_id)
 
