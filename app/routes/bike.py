@@ -76,7 +76,8 @@ def get_all_bikes():
 # Create GET route for 1 bike
 @bike_bp.route("/<bike_id>", methods=["GET"])
 def get_one_bike(bike_id):
-    chosen_bike = validate_bike(bike_id)
+    chosen_bike = get_one_obj_or_abort(Bike, bike_id)
+
     # returns jsonified object and response code as tuple
     bike_dict = {
         "id": chosen_bike.id,
