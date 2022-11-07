@@ -31,13 +31,15 @@ def validate_bike(bike_id):
 def add_bike():
     request_body = request.get_json()
 
-    # convert to bike dict
-    new_bike = Bike(
-        name=request_body["name"],
-        price=request_body["price"],
-        size=request_body["size"],
-        type=request_body["type"]
-    )
+    # convert to bike dict??
+    # new_bike = Bike(
+    #     name=request_body["name"],
+    #     price=request_body["price"],
+    #     size=request_body["size"],
+    #     type=request_body["type"]
+    # )
+    # convert FROM json obj TO Bike class??
+    new_bike = Bike.from_dict(request_body)
 
     # add to dict
     db.session.add(new_bike)
@@ -68,18 +70,22 @@ def get_all_bikes():
         bikes = Bike.query.filter_by(name=name_param)
 
     # logic to convert python bike object to dict and json
-    response = []
-    # iterate over bikes object
-    for bike in bikes:
-        bike_dict = {
-            "id": bike.id,
-            "name": bike.name,
-            "price": bike.price,
-            "size": bike.size,
-            "type": bike.type
-        }
+    # response = []
 
-        response.append(bike_dict)
+    # iterate over bikes object
+    # for bike in bikes:
+    #     bike_dict = bike.to_dict() # replaces bike_dict below
+        # bike_dict = {
+        #     "id": bike.id,
+        #     "name": bike.name,
+        #     "price": bike.price,
+        #     "size": bike.size,
+        #     "type": bike.type
+        # }
+        # response.append(bike_dict)
+
+        # list comprehension syntax
+    response = [bike.to_dict() for bike in bikes]
 
     return jsonify(response), 200
 
