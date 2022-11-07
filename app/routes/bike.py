@@ -3,26 +3,9 @@ from attr import validate
 from flask import abort, Blueprint, jsonify, make_response, request
 from app import db
 from app.models.bike import Bike
+from .routes_helper import get_one_obj_or_abort
 
 bike_bp = Blueprint("bike_bp", __name__, url_prefix="/bike")
-
-
-def validate_bike(bike_id):
-    try:
-        bike_id = int(bike_id)
-    except ValueError:
-        response_str = f"Invalid bike_id: {bike_id}. ID must be a integer."
-        abort(make_response({"message": response_str}, 400))
-
-    matching_bike = Bike.query.get(bike_id)
-
-    # bike with matching id not found -> 404
-    if matching_bike is None:
-        response_str = f"Could not find bike with ID {bike_id}"
-        abort(make_response({"message": response_str}, 404))
-
-    # if matching bike found, return bike object
-    return matching_bike
 
 
 # CREATE POST ROUTE
@@ -31,14 +14,15 @@ def validate_bike(bike_id):
 def add_bike():
     request_body = request.get_json()
 
-    # convert to bike dict??
+    # convert FROM json obj TO Bike class
     # new_bike = Bike(
     #     name=request_body["name"],
     #     price=request_body["price"],
     #     size=request_body["size"],
     #     type=request_body["type"]
     # )
-    # convert FROM json obj TO Bike class??
+
+    # convert Bike objct to bike dict
     new_bike = Bike.from_dict(request_body)
 
     # add to dict
@@ -71,7 +55,6 @@ def get_all_bikes():
 
     # logic to convert python bike object to dict and json
     # response = []
-
     # iterate over bikes object
     # for bike in bikes:
     #     bike_dict = bike.to_dict() # replaces bike_dict below
@@ -84,7 +67,7 @@ def get_all_bikes():
         # }
         # response.append(bike_dict)
 
-        # list comprehension syntax
+    # list comprehension syntax
     response = [bike.to_dict() for bike in bikes]
 
     return jsonify(response), 200
@@ -110,7 +93,9 @@ def get_one_bike(bike_id):
 @bike_bp.route("/<bike_id>", methods=["PUT"])
 def update_bike_with_new_vals(bike_id):
     # validate with helper to pass reqs
-    bike = validate_bike(bike_id)
+    # bike = validate_bike(bike_id)
+    # get_one_obj_or_abort(class, object_id)
+    bike = get_one_obj_or_abort(Bike, bike_id)
 
     request_body = request.get_json()
 
@@ -139,7 +124,8 @@ def update_bike_with_new_vals(bike_id):
 # using id
 @bike_bp.route("/<bike_id>", methods=["DELETE"])
 def delete_one_bike(bike_id):
-    bike = validate_bike(bike_id)
+    # bike = validate_bike(bike_id)
+    bike = get_one_obj_or_abort(Bike, bike_id)
 
     # command to delete object from database
     # param: bike
