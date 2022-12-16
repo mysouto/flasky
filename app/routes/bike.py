@@ -1,5 +1,4 @@
 import json
-from attr import validate
 from flask import abort, Blueprint, jsonify, make_response, request
 from app import db
 from app.models.bike import Bike
@@ -135,3 +134,20 @@ def delete_one_bike(bike_id):
     db.session.commit()
 
     return jsonify(f"Bike #{bike_id} successfully deleted."), 200
+
+
+@bike_bp.route("/<bike_id>/<new_price>", methods=["PATCH"])
+def update_one_bike_price(bike_id, new_price):
+    chosen_bike = get_one_obj_or_abort(Bike, bike_id)
+
+    try:
+        new_price = int(new_price) #new price must be an integer as we have defined in the model.
+    except:
+        response_str = f"Invalid new price: `{new_price}`. New price must be an integer"
+        return jsonify({"message":response_str}), 400
+
+    chosen_bike.price = new_price
+
+    db.session.commit()
+
+    return jsonify({"message": f"Successfully updated Bike ID `{bike_id}`'s price to be {new_price}"}), 200
