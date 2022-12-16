@@ -3,6 +3,7 @@ from flask import Flask
 # can refer back from previous projects
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 # import for new env
 from dotenv import load_dotenv
@@ -22,7 +23,7 @@ load_dotenv()
 def create_app(testing=None):
     # __name__ stores the name of the module we're in
     app = Flask(__name__)
-
+    CORS(app)
     # CONFIG FOR DATABASE
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
